@@ -1,8 +1,16 @@
 ---
 - name: Hello World!
   hosts: all
-
+  ignore_errors: yes 
+  
   tasks:
+    - name: Register loop output as a variable
+      win_shell: |
+        echo "My text";
+        echo "My text2";
+        echo "My text3";
+      register: echo_var
+
     - name: Register loop output as a variable
       shell: |
         echo "My text";
