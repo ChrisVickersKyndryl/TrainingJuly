@@ -1,0 +1,11 @@
+---
+- name: Hello World!
+  hosts: all
+
+  tasks:
+    - name: Register loop output as a variable
+      win_shell: "echo {{ item }}"
+      loop:
+        - "one"
+        - "two"
+      register: echo
