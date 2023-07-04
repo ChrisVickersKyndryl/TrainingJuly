@@ -1,0 +1,11 @@
+---
+- name: Hello World!
+  hosts: all
+
+  tasks:
+    - name: Register loop output as a variable
+      shell: >
+        echo "My text";
+        echo "My text2";
+        echo "My text3";
+      register: echo_var
