@@ -10,8 +10,8 @@
   
   - name: This is linux
     debug: msg=“Linux“
-    when: ansible_system == "Linux“
+    when: ansible_system == "Linux"
 
   - name: This is windows
     debug: msg=“Windows“
-    when: ansible_system == “Win32NT" 
+    when: ansible_system == "Win32NT" 
