@@ -4,7 +4,7 @@
 
   tasks:
     - name: Register loop output as a variable
-      win_shell: "echo {{ item }}"
+      shell: "echo {{ item }}"
       loop:
         - "one"
         - "two"
