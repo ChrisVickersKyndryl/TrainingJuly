@@ -8,4 +8,4 @@
       loop:
         - "one"
         - "two"
-      register: echo
+      register: echo_var
