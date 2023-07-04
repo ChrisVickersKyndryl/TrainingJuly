@@ -1,0 +1,17 @@
+---
+- hosts: all
+  gather_facts: yes
+
+  tasks:
+
+  # "Linux" on a Linux system and "Win32NT“ on Windows
+  - name: Distribution
+    debug: msg="{{ ansible_distribution }}"
+  
+  - name: This is linux
+    debug: msg=“Linux“
+    when: ansible_system == "Linux“
+
+  - name: This is windows
+    debug: msg=“Windows“
+    when: ansible_system == “Win32NT" 
