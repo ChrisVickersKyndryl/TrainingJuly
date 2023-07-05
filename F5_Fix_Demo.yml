@@ -1,5 +1,16 @@
-
+---
+ - name: F5 Big-IP
+   hosts: all
+   gather_facts: false
+   vars:
+     act: "{{ action | default('add') }}"
+     f5_username: "{{lookup('env', 'ANSIBLE_NET_USERNAME')}}"
+     f5_password: "{{lookup('env', 'ANSIBLE_NET_PASSWORD')}}"
+     pool: "10.0.0.1"
+     partition: "Partition1"
      
+     
+   tasks:
      - name: Disable Pool member
        bigip_pool_member:
          pool: "{{ pool }}"
@@ -16,6 +27,11 @@
        register: output
        no_log: True
        when: act == "disable"
+
+     - name: sleep for 300 seconds and continue with play
+       wait_for:
+         timeout: 300
+       delegate_to: localhost
 
      - name: Enable Pool member
        bigip_pool_member:
