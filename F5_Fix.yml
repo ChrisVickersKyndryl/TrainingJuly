@@ -1,0 +1,35 @@
+
+     
+     - name: Disable Pool member
+       bigip_pool_member:
+         pool: "{{ pool }}"
+         partition: "{{ partition }}"
+         host: "{{ ansible_default_ipv4[address] }}"
+         port: "{{ port }}"
+         state: forced_offline
+         provider:
+           server: "{{ f5_ip }}"
+           password: "{{ f5_password }}"
+           user: "{{ f5_username }}"
+           validate_certs: yes
+           ssh_keyfile: "/tmp/f5ssl001ode.pem"
+       register: output
+       no_log: True
+       when: act == "disable"
+
+     - name: Enable Pool member
+       bigip_pool_member:
+         pool: "{{ pool }}"
+         partition: "{{ partition }}"
+         host: "{{ ansible_default_ipv4[address] }}"
+         port: "{{ port }}"
+         state: enabled
+         provider:
+           server: "{{ f5_ip }}"
+           password: "{{ f5_password }}"
+           user: "{{ f5_username }}"
+           validate_certs: yes
+           ssh_keyfile: "/tmp/f5ssl001ode.pem"
+       register: output
+       no_log: True
+       when: act == "enable"
