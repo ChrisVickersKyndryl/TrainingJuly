@@ -8,7 +8,7 @@
     location_ps1: "C:\\ArchiveFile.ps1"
     location_pwd: "C:\\Credential.enc"
     location_src: "C:\\Temp\\Copy demo\\Source"
-    location_dest: "\\\\testTest\\
+    location_dest: "\\\\localhost\\
     
   tasks:
     - name: Creates encryped file of service acount password used to connect to file storage 
