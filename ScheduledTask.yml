@@ -14,6 +14,9 @@
   tasks:
 
     - name: Run command as another user
+      win_shell: dir
+
+    - name: Run command as another user
       win_shell: pwd
 
     - name: Run command as another user
