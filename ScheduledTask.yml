@@ -15,7 +15,6 @@
   - name: Creates encryped file of service acount password used to connect to file storage 
     win_shell: |
       '
-      # Convert plain text password to string 
       $securePassword = ConvertTo-SecureString "{{ storage_password }}" -AsPlainText -Force
         
       # Save the secure password to a text file
