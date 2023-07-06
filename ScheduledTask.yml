@@ -17,5 +17,5 @@
       win_shell: pwd
 
     - name: Run command as another user
-      win_shell: CreatedEncryptedFile.ps1
+      win_shell: ./CreatedEncryptedFile.ps1
 
