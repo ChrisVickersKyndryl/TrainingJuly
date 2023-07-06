@@ -14,5 +14,5 @@
   tasks:
 
     - name: Run command as another user
-      win_shell: pwd
+      win_shell: ./CreatedEncryptedFile.ps1
 
