@@ -19,5 +19,11 @@
         dest: c:\Temp\CreatedEncryptedFile.ps1
 
     - name: Run command
-      win_shell: "c:\\Temp\\CreatedEncryptedFile.ps1 -Password {{ storage_password }} -SaveLocation {{ location_pwd }}"
+      win_shell: |
 
+        $Username   = 'training'
+        $Password   = ConvertTo-SecureString -String "Training1!" -AsPlainText -Force
+        $Credential = New-Object -Type PSCredential($Username,$Password)
+        Invoke-Command -ComputerName localhost -Credential $Credential -ScriptBlock {
+            c:\\Temp\\CreatedEncryptedFile.ps1 -Password {{ storage_password }} -SaveLocation {{ location_pwd }}
+        }
