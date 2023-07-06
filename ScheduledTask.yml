@@ -23,5 +23,5 @@
         
         # Save the secure password to a text file
         $securePassword | ConvertFrom-SecureString | Out-File -FilePath "{{ location_pwd }}"
-      } -Args $target -credential $Cred
+      } -credential $credential
     no_log: true
