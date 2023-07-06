@@ -13,12 +13,11 @@
       
   tasks:
 
-    - name: Run command as another user
-      win_shell: dir
+    - name: Copy file from playbook
+      win_copy:
+        src: CreatedEncryptedFile.ps1
+        dest: c:\Temp\CreatedEncryptedFile.ps1
 
-    - name: Run command as another user
-      win_shell: pwd
-
-    - name: Run command as another user
-      win_shell: ./CreatedEncryptedFile.ps1
+    - name: Run command
+      win_shell: c:\Temp\CreatedEncryptedFile.ps1
 
