@@ -12,22 +12,7 @@
     location_dest: "\\\\localhost\\"
       
   tasks:
-  
-  - name: Creates encrypted file of service account password used to connect to file storage 
-    win_shell: |
-      # Create a PSCredential object with the network credentials
-      $pwd = $("{{ service_password }}" | ConvertTo-SecureString -AsPlainText -Force)
-      $credential = New-Object System.Management.Automation.PSCredential("{{ service_username }}", $pwd)
 
-      Start-Job -scriptblock {
-        # Convert text to secure string
-        $securePassword = ConvertTo-SecureString "{{ storage_password }}" -AsPlainText -Force
-        
-        # Save the secure password to a text file
-        $securePassword | ConvertFrom-SecureString | Out-File -FilePath "{{ location_pwd }}"
-      } -credential $credential
-      Get-Job | Wait-Job
-    #no_log: true
-    become: true
-    become_user: "Training"
-    become_password: "Training1!"
+    - name: Run command as another user
+      win_shell: pwd
+
