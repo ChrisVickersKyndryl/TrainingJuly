@@ -15,10 +15,10 @@
   - name: Creates encryped file of service acount password used to connect to file storage 
     win_shell: |
       # Convert text to secure string
-      $securePassword = ConvertTo-SecureString "{{ storage_password }}" -AsPlainText -Force
+      $securePassword = ConvertTo-SecureString {{ storage_password }} -AsPlainText -Force
         
       # Save the secure password to a text file
-      $securePassword | ConvertFrom-SecureString | Out-File -FilePath "{{ location_pwd }}"
+      $securePassword | ConvertFrom-SecureString | Out-File -FilePath {{ location_pwd }}
     become: true
     become_user: "{{ service_username }}"
     become_password: "{{ service_password }}"
