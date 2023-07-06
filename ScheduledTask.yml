@@ -35,19 +35,19 @@
           $networkUsername = "{{ storage_username }}"
           
           # Read the encrypted password from the text file
-          $securePassword = Get-Content -Path "{{ location_pwd }}" | ConvertTo-SecureString -AsPlainText -Force
+          $securePassword = Get-Content -Path '{{ location_pwd }}' | ConvertTo-SecureString -AsPlainText -Force
           
           # Create a PSCredential object with the network credentials
           $credential = New-Object System.Management.Automation.PSCredential($networkUsername, $securePassword)
           
           # Get all files in folder than end with .evtv
-          Get-ChildItem -Path "{{ local_loc }}" -Filter "*.evtx" | ForEach-Object {
+          Get-ChildItem -Path '{{ local_loc }}' -Filter "*.evtx" | ForEach-Object {
               # Create folder of server name, if it doesn't exist.
               If(!(test-path -PathType container $destinationPath)) {
                   New-Item -ItemType Directory -Path $destinationPath
               }
               # Copy file to remote folder as user
-              Move-Item -Path $_.FullName -Destination "$destinationPath$($_.Name)" -Credential $credential
+              Move-Item -Path $_.FullName -Destination \"$destinationPath$($_.Name)\" -Credential $credential
           }
         dest: "{{ ps1_location }}"
       no_log: True
