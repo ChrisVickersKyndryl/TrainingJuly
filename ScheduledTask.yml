@@ -9,49 +9,50 @@
     location_pwd: "C:\\Credential.enc"
     location_src: "C:\\Temp\\Copy demo\\Source"
     location_dest: "\\\\localhost\\
-    
+      
   tasks:
-    - name: Creates encryped file of service acount password used to connect to file storage 
-      win_shell: |
-        # Convert plain text password to string 
-        $securePassword = ConvertTo-SecureString '{{ storage_password }}' -AsPlainText -Force
+  
+  - name: Creates encryped file of service acount password used to connect to file storage 
+    win_shell: |
+      # Convert plain text password to string 
+      $securePassword = ConvertTo-SecureString '{{ storage_password }}' -AsPlainText -Force
         
-        # Save the secure password to a text file
-        $securePassword | ConvertFrom-SecureString | Out-File -FilePath '{{ location_pwd }}'
+      # Save the secure password to a text file
+      $securePassword | ConvertFrom-SecureString | Out-File -FilePath '{{ location_pwd }}'
+      # Test
+    become_user: "{{ service_username }}"
+    become_password: "{{ service_password }}"
+    no_log: True
         
-      become_user: "{{ service_username }}"
-      become_password: "{{ service_password }}"
-      no_log: True
-        
-    - name: "Check if file exists"
-      stat:
-        path: "{{ location_pwd }}"
+  - name: "Check if file exists"
+    stat:
+      path: "{{ location_pwd }}"
     
-    - name: Create ps1 file
-      win_copy:
-        content: |
-          # Variables
-          $sourcePath = "{{ location_src }}"
-          $destinationPath = "{{ location_dest }}$($env:computername)\"
-          $networkUsername = "{{ storage_username }}"
+  - name: Create ps1 file
+    win_copy:
+    content: |
+      # Variables
+      $sourcePath = "{{ location_src }}"
+      $destinationPath = "{{ location_dest }}$($env:computername)\"
+      $networkUsername = "{{ storage_username }}"
           
-          # Read the encrypted password from the text file
-          $securePassword = Get-Content -Path '{{ location_pwd }}' | ConvertTo-SecureString -AsPlainText -Force
+      # Read the encrypted password from the text file
+      $securePassword = Get-Content -Path '{{ location_pwd }}' | ConvertTo-SecureString -AsPlainText -Force
           
-          # Create a PSCredential object with the network credentials
-          $credential = New-Object System.Management.Automation.PSCredential($networkUsername, $securePassword)
+      # Create a PSCredential object with the network credentials
+      $credential = New-Object System.Management.Automation.PSCredential($networkUsername, $securePassword)
           
-          # Get all files in folder than end with .evtv
-          Get-ChildItem -Path '{{ local_loc }}' -Filter "*.evtx" | ForEach-Object {
-              # Create folder of server name, if it doesn't exist.
-              If(!(test-path -PathType container $destinationPath)) {
-                  New-Item -ItemType Directory -Path $destinationPath
-              }
-              # Copy file to remote folder as user
-              Move-Item -Path $_.FullName -Destination \"$destinationPath$($_.Name)\" -Credential $credential
+      # Get all files in folder than end with .evtv
+      Get-ChildItem -Path '{{ local_loc }}' -Filter "*.evtx" | ForEach-Object {
+         # Create folder of server name, if it doesn't exist.
+         If(!(test-path -PathType container $destinationPath)) {
+              New-Item -ItemType Directory -Path $destinationPath
           }
-        dest: "{{ ps1_location }}"
-      no_log: True
+          # Copy file to remote folder as user
+          Move-Item -Path $_.FullName -Destination \"$destinationPath$($_.Name)\" -Credential $credential
+      }
+  dest: "{{ ps1_location }}"
+  no_log: True
           
     - name: Create scheduled task
       win_scheduled_task:
