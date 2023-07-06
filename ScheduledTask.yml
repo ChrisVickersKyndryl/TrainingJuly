@@ -31,6 +31,7 @@
   - name: Create ps1 file
     win_copy:
     content: |
+      '
       # Variables
       $sourcePath = "{{ location_src }}"
       $destinationPath = "{{ location_dest }}$($env:computername)\"
@@ -51,6 +52,7 @@
           # Copy file to remote folder as user
           Move-Item -Path $_.FullName -Destination \"$destinationPath$($_.Name)\" -Credential $credential
       }
+      '
     dest: {{ location)ps1 }}
     no_log: True
           
