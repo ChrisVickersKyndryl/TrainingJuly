@@ -1,6 +1,7 @@
 ---
 - name: Create scheduled task to copy files
   hosts: all
+  gather_facts: false
   vars:
     task_name: "Copy archived logs to server"  # Replace with the desired task name
     task_trigger_frequency: "daily"  # Replace with the desired trigger frequency (e.g., daily, weekly, monthly)
