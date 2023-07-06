@@ -1,0 +1,66 @@
+---
+- name: Create scheduled task to copy files
+  hosts: all
+  vars:
+    task_name: Copy archived logs to server  # Replace with the desired task name
+    task_trigger_frequency: daily  # Replace with the desired trigger frequency (e.g., daily, weekly, monthly)
+    task_trigger_time: '23:00'  # Replace with the desired trigger time in 24-hour format (e.g., '06:00')
+    location_ps1: "C:\\ArchiveFile.ps1"
+    location_pwd: "C:\\Credential.enc"
+    location_src: "C:\\Temp\\Copy demo\\Source"
+    location_dest: "\\\\testTest\\
+    
+  tasks:
+    - name: Creates encryped file of service acount password used to connect to file storage 
+      win_shell: |
+        # Convert plain text password to string 
+        $securePassword = ConvertTo-SecureString "{{ password_to_encrypt }}" -AsPlainText -Force
+        
+        # Save the secure password to a text file
+        $securePassword | ConvertFrom-SecureString | Out-File -FilePath "{{ location_pwd }}"
+      become_user: "{{ user_svc_username }}"
+      become_password: "{{ user_svc_psssword }}"
+      no_log: True
+        
+    - name: "Check if file exists"
+      stat:
+        path: "{{ location_pwd }}"
+    
+    - name: Create ps1 file
+      win_copy:
+        content: |
+          # Variables
+          $sourcePath = "{{ location_src }}"
+          $destinationPath = "{{ location_dest }}$($env:computername)\"
+          $networkUsername = "{{ username_network }}"
+          
+          # Read the encrypted password from the text file
+          $securePassword = Get-Content -Path "{{ location_pwd }}" | ConvertTo-SecureString -AsPlainText -Force
+          
+          # Create a PSCredential object with the network credentials
+          $credential = New-Object System.Management.Automation.PSCredential($networkUsername, $securePassword)
+          
+          # Get all files in folder than end with .evtv
+          Get-ChildItem -Path "{{ local_loc }}" -Filter "*.evtx" | ForEach-Object {
+              # Create folder of server name, if it doesn't exist.
+              If(!(test-path -PathType container $destinationPath)) {
+                  New-Item -ItemType Directory -Path $destinationPath
+              }
+              # Copy file to remote folder as user
+              Move-Item -Path $_.FullName -Destination "$destinationPath$($_.Name)" -Credential $credential
+          }
+        dest: "{{ ps1_location }}"
+      no_log: True
+          
+    - name: Create scheduled task
+      win_scheduled_task:
+        name: "{{ task_name }}"
+        description: "Scheduled task created by Ansible"
+        command: "{{ location_ps1 }}"
+        state: present
+        enabled: yes
+        trigger_frequency: "{{ task_trigger_frequency }}"
+        trigger_time: "{{ task_trigger_time }}"
+        username: "{{ user_svc_username }}"
+        password: "{{ user_svc_psssword }}"
+      no_log: True
