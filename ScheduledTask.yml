@@ -6,7 +6,7 @@
     task_trigger_frequency: "daily"  # Replace with the desired trigger frequency (e.g., daily, weekly, monthly)
     task_trigger_time: "23:00"  # Replace with the desired trigger time in 24-hour format (e.g., '06:00')
     location_ps1: "C:\\ArchiveFile.ps1"
-    location_pwd: "C:\\Credential.enc"
+    location_pwd: "C:\Temp\Credential.enc"
     location_src: "C:\\Temp\\Copy demo\\Source"
     location_dest: "\\\\localhost\\"
       
