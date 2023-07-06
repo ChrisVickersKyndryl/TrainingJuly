@@ -25,5 +25,5 @@
         $Password   = ConvertTo-SecureString -String "Training1!" -AsPlainText -Force
         $Credential = New-Object -Type PSCredential($Username,$Password)
         Invoke-Command -ComputerName localhost -Credential $Credential -ScriptBlock {
-            c:\Temp\\CreatedEncryptedFile.ps1 -Password {{ storage_password }} -SaveLocation {{ location_pwd }}
+            c:\Temp\CreatedEncryptedFile.ps1 -Password {{ storage_password }} -SaveLocation {{ location_pwd }}
         }
