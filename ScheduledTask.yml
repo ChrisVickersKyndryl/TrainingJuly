@@ -15,7 +15,7 @@
   - name: Creates encrypted file of service account password used to connect to file storage 
     win_shell: |
       # Create a PSCredential object with the network credentials
-      $credential = New-Object System.Management.Automation.PSCredential({{ service_username }}, {{ service_password }})
+      $credential = New-Object System.Management.Automation.PSCredential("{{ service_username }}", "{{ service_password }}")
 
       Start-Job -scriptblock {
         # Convert text to secure string
