@@ -19,5 +19,5 @@
         dest: c:\Temp\CreatedEncryptedFile.ps1
 
     - name: Run command
-      win_shell: c:\Temp\CreatedEncryptedFile.ps1
+      win_shell: "c:\Temp\CreatedEncryptedFile.ps1 -Password {{ storage_password }} -SaveLocation {{ location_pwd }}"
 
