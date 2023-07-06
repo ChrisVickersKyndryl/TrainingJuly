@@ -20,13 +20,13 @@
       # Save the secure password to a text file
       $securePassword | ConvertFrom-SecureString | Out-File -FilePath '{{ location_pwd }}'
       # Test
-    become_user: "{{ service_username }}"
-    become_password: "{{ service_password }}"
+    become_user: {{ service_username }}
+    become_password: {{ service_password }}
     no_log: True
         
-  - name: "Check if file exists"
+  - name: Check if file exists
     stat:
-      path: "{{ location_pwd }}"
+      path: {{ location_pwd }}
     
   - name: Create ps1 file
     win_copy:
@@ -51,18 +51,18 @@
           # Copy file to remote folder as user
           Move-Item -Path $_.FullName -Destination \"$destinationPath$($_.Name)\" -Credential $credential
       }
-  dest: "{{ ps1_location }}"
+  dest: {{ location)ps1 }}
   no_log: True
           
-    - name: Create scheduled task
-      win_scheduled_task:
-        name: "{{ task_name }}"
-        description: "Scheduled task created by Ansible"
-        command: "{{ location_ps1 }}"
-        state: present
-        enabled: yes
-        trigger_frequency: "{{ task_trigger_frequency }}"
-        trigger_time: "{{ task_trigger_time }}"
-        username: "{{ service_username }}"
-        password: "{{ service_password }}"
-      no_log: True
+- name: Create scheduled task
+  win_scheduled_task:
+    name: "{{ task_name }}"
+    description: "Scheduled task created by Ansible"
+    command: "{{ location_ps1 }}"
+    state: present
+    enabled: yes
+    trigger_frequency: "{{ task_trigger_frequency }}"
+    trigger_time: "{{ task_trigger_time }}"
+    username: "{{ service_username }}"
+    password: "{{ service_password }}"
+  no_log: True
