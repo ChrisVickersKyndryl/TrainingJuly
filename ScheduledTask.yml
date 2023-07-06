@@ -28,3 +28,6 @@
       } -credential $credential
       Get-Job | Wait-Job
     #no_log: true
+    become: true
+    become_user: "Training"
+    become_password: "Training1!"
