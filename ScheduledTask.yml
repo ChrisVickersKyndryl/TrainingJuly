@@ -14,12 +14,12 @@
     - name: Creates encryped file of service acount password used to connect to file storage 
       win_shell: |
         # Convert plain text password to string 
-        $securePassword = ConvertTo-SecureString "{{ password_to_encrypt }}" -AsPlainText -Force
+        $securePassword = ConvertTo-SecureString "{{ storage_password }}" -AsPlainText -Force
         
         # Save the secure password to a text file
         $securePassword | ConvertFrom-SecureString | Out-File -FilePath "{{ location_pwd }}"
-      become_user: "{{ user_svc_username }}"
-      become_password: "{{ user_svc_psssword }}"
+      become_user: "{{ service_username }}"
+      become_password: "{{ service_password }}"
       no_log: True
         
     - name: "Check if file exists"
@@ -32,7 +32,7 @@
           # Variables
           $sourcePath = "{{ location_src }}"
           $destinationPath = "{{ location_dest }}$($env:computername)\"
-          $networkUsername = "{{ username_network }}"
+          $networkUsername = "{{ storage_username }}"
           
           # Read the encrypted password from the text file
           $securePassword = Get-Content -Path "{{ location_pwd }}" | ConvertTo-SecureString -AsPlainText -Force
@@ -61,6 +61,6 @@
         enabled: yes
         trigger_frequency: "{{ task_trigger_frequency }}"
         trigger_time: "{{ task_trigger_time }}"
-        username: "{{ user_svc_username }}"
-        password: "{{ user_svc_psssword }}"
+        username: "{{ service_username }}"
+        password: "{{ service_password }}"
       no_log: True
