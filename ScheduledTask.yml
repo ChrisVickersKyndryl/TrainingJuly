@@ -16,15 +16,7 @@
     - name: Copy file from playbook
       win_copy:
         src: CreatedEncryptedFile.ps1
-        dest: c:\Temp\CreatedEncryptedFile.ps1
+        dest: "c:\Temp\CreatedEncryptedFile.ps1"
 
     - name: Run command
-      win_shell: |
-        '$Username   = "training"
-        $Password   = ConvertTo-SecureString -String "Training1!" -AsPlainText -Force
-        $Credential = New-Object -Type PSCredential($Username,$Password)
-        Invoke-Command -ComputerName localhost -Credential $Credential -ScriptBlock {
-            Set-Content -Path c:\Temp\TES_THERE.txt -Value "Hello, World"
-        
-            c:\Temp\CreatedEncryptedFile.ps1 -Password {{ storage_password }} -SaveLocation {{ location_pwd }}
-        }'
+      win_shell: "C:\Temp\CreatedEncryptedFile.ps1 -Password {{ storage_password }} -SaveLocation {{ location_pwd }}"
